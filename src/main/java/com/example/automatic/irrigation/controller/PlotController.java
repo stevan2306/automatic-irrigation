@@ -1,64 +1,54 @@
 package com.example.automatic.irrigation.controller;
 
-import com.example.automatic.irrigation.exception.IrrigationException;
 import com.example.automatic.irrigation.modal.PlotRequest;
 import com.example.automatic.irrigation.modal.PlotResponse;
 import com.example.automatic.irrigation.service.PlotService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
-@RequestMapping("/plot")
-public class PlotController {
+public class PlotController extends BaseRestController {
+
+    private Logger logger = LoggerFactory.getLogger(PlotController.class);
+
+    private static final String BASE_URI = "/plot";
 
     @Autowired
     private PlotService plotService;
 
-    @PostMapping
+    @PostMapping(value = BASE_URI)
     public PlotResponse createPlot(@RequestBody PlotRequest plotRequest) {
-        try {
-            return plotService.addPlot(plotRequest);
-        } catch (Exception e) {
-              throw new IrrigationException(e);
-        }
+        logger.info("started creating plot");
+        return plotService.addPlot(plotRequest);
     }
 
-    @PutMapping("/{id}")
-    public PlotResponse updatePlot(@PathVariable(name = "id") String id, @RequestBody PlotRequest plotRequest) {
-        try {
-            return plotService.updatePlot(id, plotRequest);
-        } catch (Exception e) {
-            throw new IrrigationException(e);
-        }
+    @PutMapping(value = BASE_URI + "/{id}")
+    public PlotResponse updatePlot(@PathVariable(name = "id") Integer id, @RequestBody PlotRequest plotRequest) {
+        logger.info("started updatePlot plot with Id: {}", id);
+        return plotService.updatePlot(id, plotRequest);
     }
 
-    @GetMapping
+    @GetMapping(value = BASE_URI)
     public List<PlotResponse> getAllPlots() {
-        try {
-            return plotService.getPlots();
-        } catch (Exception e) {
-            throw new IrrigationException(e);
-        }
+        logger.info("started getAllPlots");
+        return plotService.getPlots();
     }
 
-    @GetMapping("/{id}")
-    public PlotResponse getPlotById(@PathVariable("id") String name) {
-        try {
-            return plotService.getPlotById(name);
-        } catch (Exception e) {
-            throw new IrrigationException(e);
-        }
+    @GetMapping(value = BASE_URI + "/{id}")
+    public PlotResponse getPlotById(@PathVariable("id") Integer id) {
+        logger.info("started getPlotById plot with Id: {}", id);
+        return plotService.getPlotById(id);
     }
 
-    @GetMapping("/{id}")
-    public String deletePlotById(@PathVariable("id") String id) {
-        try {
-            return plotService.deletePlotById(id);
-        } catch (Exception e) {
-            throw new IrrigationException(e);
-        }
+    @DeleteMapping(value = BASE_URI + "/{id}")
+    public String deletePlotById(@PathVariable("id") Integer id) {
+        logger.info("started deletePlotById plot with Id: {}", id);
+        return plotService.deletePlotById(id);
     }
 
 }

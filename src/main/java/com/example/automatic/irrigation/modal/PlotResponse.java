@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PlotResponse {
-    private String id;
+    private Integer id;
     private String name;
     private String sensorName;
     private IrrigationPlanDetails irrigationPlan;

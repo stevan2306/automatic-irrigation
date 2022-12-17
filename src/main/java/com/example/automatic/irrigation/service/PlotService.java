@@ -11,12 +11,12 @@ public interface PlotService {
 
     PlotResponse addPlot(PlotRequest plotRequest);
 
-    PlotResponse updatePlot(String id, PlotRequest plotRequest);
+    PlotResponse updatePlot(Integer id, PlotRequest plotRequest);
 
     List<PlotResponse> getPlots();
 
-    PlotResponse getPlotById(String name);
+    PlotResponse getPlotById(Integer id);
 
-    String deletePlotById(String name);
+    String deletePlotById(Integer id);
 
 }

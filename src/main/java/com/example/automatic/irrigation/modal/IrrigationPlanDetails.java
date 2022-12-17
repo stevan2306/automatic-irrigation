@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class IrrigationPlanDetails {
     private Integer durationOfIrrigationInMinutes;
     private Integer intervalOfIrrigationInMinutes;
+    private Integer amountOfWaterRequiredInLitres;
 }

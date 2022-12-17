@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -21,7 +21,7 @@ public class Sensor {
     private String name;
 
     @Column(name = "last_irrigated_time")
-    private Date lastIrrigatedTime;
+    private LocalDateTime lastIrrigatedTime;
 
     @OneToOne(mappedBy = "sensor")
     private Plot plot;

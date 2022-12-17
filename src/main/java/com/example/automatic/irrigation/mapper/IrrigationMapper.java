@@ -26,6 +26,7 @@ public class IrrigationMapper {
         IrrigationPlanDetails irrigationPlanDetails = plotRequest.getIrrigationPlanDetails();
         plan.setDurationInMinutes(irrigationPlanDetails.getDurationOfIrrigationInMinutes());
         plan.setIntervalInMinutes(irrigationPlanDetails.getIntervalOfIrrigationInMinutes());
+        plan.setAmountOfWaterRequiredInLitres(irrigationPlanDetails.getAmountOfWaterRequiredInLitres());
         plot.setIrrigationPlan(plan);
         return plot;
     }
@@ -38,6 +39,7 @@ public class IrrigationMapper {
         IrrigationPlanDetails irrigationPlanDetails = new IrrigationPlanDetails();
         irrigationPlanDetails.setDurationOfIrrigationInMinutes(irrigationPlan.getDurationInMinutes());
         irrigationPlanDetails.setIntervalOfIrrigationInMinutes(irrigationPlan.getIntervalInMinutes());
+        irrigationPlanDetails.setAmountOfWaterRequiredInLitres(irrigationPlan.getAmountOfWaterRequiredInLitres());
         plotResponse.setIrrigationPlan(irrigationPlanDetails);
         plotResponse.setSensorName(plot.getSensor().getName());
         return plotResponse;

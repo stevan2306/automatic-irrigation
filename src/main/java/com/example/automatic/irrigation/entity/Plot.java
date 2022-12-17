@@ -16,7 +16,7 @@ public class Plot {
     @Id
     @Column(name="id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String id;
+    private Integer id;
 
     @Column
     private String name;
