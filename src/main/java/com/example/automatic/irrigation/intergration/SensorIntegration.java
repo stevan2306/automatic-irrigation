@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 
 @Component
@@ -24,6 +26,8 @@ public class SensorIntegration {
     @Autowired
     private SchedulerService schedulerService;
 
+    private Map<Integer, Timer> sensors = new HashMap<>();
+
 
     private Long delayInMinutes = 5 * 60 * 1000L;
 
@@ -32,10 +36,20 @@ public class SensorIntegration {
         logger.info("Sensor started to monitor plot every 5 mins for irrigation");
         List<Plot> plotList = this.plotRepository.findAll();
         for (Plot plot : plotList) {
-            Timer timer = new Timer();
-            timer.schedule(new IrrigationTask(plot.getId(), this.schedulerService), delayInMinutes);
+            addSensorConfigure(plot);
         }
 
     }
 
+    public void addSensorConfigure(Plot plot) {
+        Timer timer = new Timer();
+        sensors.put(plot.getId(), timer);
+        timer.schedule(new IrrigationTask(plot.getId(), this.schedulerService), 0, delayInMinutes);
+
+    }
+
+    public void removeSensorConfig(Integer plotId) {
+        sensors.get(plotId).cancel();
+        sensors.remove(plotId);
+    }
 }

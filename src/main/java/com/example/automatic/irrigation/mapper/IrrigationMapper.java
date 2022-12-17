@@ -42,6 +42,7 @@ public class IrrigationMapper {
         irrigationPlanDetails.setAmountOfWaterRequiredInLitres(irrigationPlan.getAmountOfWaterRequiredInLitres());
         plotResponse.setIrrigationPlan(irrigationPlanDetails);
         plotResponse.setSensorName(plot.getSensor().getName());
+        plotResponse.setLastIrrigatedTime(plot.getSensor().getLastIrrigatedTime());
         return plotResponse;
     }
 

@@ -1,7 +1,9 @@
 package com.example.automatic.irrigation.service;
 
 import com.example.automatic.irrigation.entity.Plot;
+import com.example.automatic.irrigation.entity.Sensor;
 import com.example.automatic.irrigation.exception.IrrigationException;
+import com.example.automatic.irrigation.intergration.SensorIntegration;
 import com.example.automatic.irrigation.mapper.IrrigationMapper;
 import com.example.automatic.irrigation.modal.ErrorStatus;
 import com.example.automatic.irrigation.modal.PlotRequest;
@@ -26,12 +28,16 @@ public class PlotServiceImpl implements PlotService {
     @Autowired
     private IrrigationMapper irrigationMapper;
 
+    @Autowired
+    private SensorIntegration sensorIntegration;
+
     @Override
     public PlotResponse addPlot( PlotRequest plotRequest) {
         try {
             Plot plot = irrigationMapper.mapToPlot(plotRequest, null);
             Plot savedPlot = plotRepository.save(plot);
             logger.info("created plot with ID: {}", savedPlot.getId());
+            sensorIntegration.addSensorConfigure(plot);
             return irrigationMapper.mapToPlotResponse(savedPlot);
         } catch (Exception e) {
             logger.error("Exception occurs when addPlot", e);
@@ -91,6 +97,7 @@ public class PlotServiceImpl implements PlotService {
     public String deletePlotById(Integer id) {
         try {
             plotRepository.deleteById(id);
+            sensorIntegration.removeSensorConfig(id);
             return "DELETED";
         } catch (Exception e) {
             logger.error("Exception occurs when deletePlotById", e);
