@@ -1,7 +1,22 @@
 package com.example.automatic.irrigation.service;
 
+import com.example.automatic.irrigation.modal.PlotRequest;
+import com.example.automatic.irrigation.modal.PlotResponse;
 import org.springframework.stereotype.Service;
 
-@Service
-public class PlotService {
+import java.util.List;
+
+
+public interface PlotService {
+
+    PlotResponse addPlot(PlotRequest plotRequest);
+
+    PlotResponse updatePlot(String id, PlotRequest plotRequest);
+
+    List<PlotResponse> getPlots();
+
+    PlotResponse getPlotById(String name);
+
+    String deletePlotById(String name);
+
 }

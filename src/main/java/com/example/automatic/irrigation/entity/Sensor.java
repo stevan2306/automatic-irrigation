@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -16,8 +17,11 @@ public class Sensor {
     @Column(name = "id")
     private Integer id;
 
+    @Column
+    private String name;
+
     @Column(name = "last_irrigated_time")
-    private String lastIrrigatedTime;
+    private Date lastIrrigatedTime;
 
     @OneToOne(mappedBy = "sensor")
     private Plot plot;

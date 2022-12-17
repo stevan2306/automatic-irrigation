@@ -21,6 +21,7 @@ public class Plot {
     @Column
     private String name;
 
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "plan_id", referencedColumnName = "id")
     private IrrigationPlan irrigationPlan;

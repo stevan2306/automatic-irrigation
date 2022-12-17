@@ -19,11 +19,11 @@ public class IrrigationPlan {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
 
-    @Column
-    private Integer duration;
+    @Column(name = "duration_in_minutes")
+    private Integer durationInMinutes;
 
-    @Column
-    private Integer interval;
+    @Column(name = "interval_in_minutes")
+    private Integer intervalInMinutes;
 
     @OneToOne(mappedBy = "irrigationPlan")
     private Plot plot;
