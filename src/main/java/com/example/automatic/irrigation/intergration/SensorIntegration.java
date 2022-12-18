@@ -7,6 +7,7 @@ import com.example.automatic.irrigation.service.SchedulerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -28,12 +29,13 @@ public class SensorIntegration {
 
     private Map<Integer, Timer> sensors = new HashMap<>();
 
+    @Value("${sensor.monitor.interval.minutes}")
+    private int sensorMonitorIntervalInMinutes;
 
-    private Long delayInMinutes = 5 * 60 * 1000L;
 
     @PostConstruct
     public void init() {
-        logger.info("Sensor started to monitor plot every 5 mins for irrigation");
+        logger.info("Sensor started to monitor plot every {} minutes for irrigation", sensorMonitorIntervalInMinutes);
         List<Plot> plotList = this.plotRepository.findAll();
         for (Plot plot : plotList) {
             addSensorConfigure(plot);
@@ -42,13 +44,15 @@ public class SensorIntegration {
     }
 
     public void addSensorConfigure(Plot plot) {
+        logger.info("sensor added to plot {}", plot.getName());
         Timer timer = new Timer();
         sensors.put(plot.getId(), timer);
-        timer.schedule(new IrrigationTask(plot.getId(), this.schedulerService), 0, delayInMinutes);
+        timer.schedule(new IrrigationTask(plot.getId(), this.schedulerService), 0, sensorMonitorIntervalInMinutes * 60 * 1000L);
 
     }
 
     public void removeSensorConfig(Integer plotId) {
+        logger.info("sensor removed to plot with Id {}", plotId);
         sensors.get(plotId).cancel();
         sensors.remove(plotId);
     }
