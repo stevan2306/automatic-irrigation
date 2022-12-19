@@ -2,6 +2,7 @@ package com.example.automatic.irrigation.intergration;
 
 import com.example.automatic.irrigation.entity.Plot;
 import com.example.automatic.irrigation.repository.PlotRepository;
+import com.example.automatic.irrigation.scheduler.AlertTask;
 import com.example.automatic.irrigation.scheduler.IrrigationTask;
 import com.example.automatic.irrigation.service.SchedulerService;
 import org.slf4j.Logger;
@@ -44,11 +45,26 @@ public class SensorIntegration {
     }
 
     public void addSensorConfigure(Plot plot) {
-        logger.info("sensor added to plot {}", plot.getName());
-        Timer timer = new Timer();
-        sensors.put(plot.getId(), timer);
-        timer.schedule(new IrrigationTask(plot.getId(), this.schedulerService), 0, sensorMonitorIntervalInMinutes * 60 * 1000L);
+        // alert if sensor not added to plot
+        if (plot.getSensor() == null) {
+            logger.warn("Sensor not added to plot: {}", plot.getName());
+            Timer timer = new Timer();
+            sensors.put(plot.getId(), null);
+            timer.schedule(new AlertTask(plot.getName()), 0, sensorMonitorIntervalInMinutes * 60 * 1000L);
+        } else {
+            logger.info("sensor added to plot {}", plot.getName());
+            Timer timer = new Timer();
+            sensors.put(plot.getId(), timer);
+            timer.schedule(new IrrigationTask(plot.getId(), this.schedulerService), 0, sensorMonitorIntervalInMinutes * 60 * 1000L);
+        }
 
+    }
+
+    public void updateSensorConfig(Plot plot) {
+        logger.info("sensor update to plot with Id {}", plot.getId());
+        sensors.get(plot.getId()).cancel();
+        sensors.remove(plot.getId());
+        addSensorConfigure(plot);
     }
 
     public void removeSensorConfig(Integer plotId) {

@@ -51,8 +51,9 @@ public class PlotServiceImpl implements PlotService {
             Optional<Plot> plot =  plotRepository.findById(id);
             if (plot.isPresent()) {
                 Plot updatedPlot = irrigationMapper.mapToPlot(plotRequest, plot.get());
-                plotRepository.save(updatedPlot);
+                Plot savedPlot = plotRepository.save(updatedPlot);
                 logger.info("updated plot with ID: {}", id);
+                sensorIntegration.updateSensorConfig(savedPlot);
                 return getPlotById(id);
             } else {
                 logger.error("Update source not found for Id: {}", id);
